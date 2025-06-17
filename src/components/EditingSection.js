@@ -128,6 +128,17 @@ export default function EditingSection() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex relative">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: "url('/sd.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
+
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
