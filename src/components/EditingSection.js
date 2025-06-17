@@ -144,6 +144,17 @@ export default function EditingSection() {
         backgroundRepeat: "no-repeat",
       }}
     >
+      {/* Grid Dot Pattern Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0)
+          `,
+          backgroundSize: "20px 20px",
+        }}
+      ></div>
+
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
