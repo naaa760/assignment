@@ -37,6 +37,14 @@ export default function EditingSection() {
     addStep,
   } = useWorkflowStore();
 
+  // Debug: Check if image loads
+  React.useEffect(() => {
+    const img = new Image();
+    img.onload = () => console.log("Background image loaded successfully");
+    img.onerror = () => console.log("Background image failed to load");
+    img.src = "/sd.png";
+  }, []);
+
   // Initialize default positions for cards
   const getDefaultPosition = (index) => {
     const positions = [
@@ -130,7 +138,7 @@ export default function EditingSection() {
     <div
       className="min-h-screen flex relative"
       style={{
-        background: `linear-gradient(rgba(249, 250, 251, 0.7), rgba(249, 250, 251, 0.7)), url('/sd.png')`,
+        backgroundImage: `url('/sd.png')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
