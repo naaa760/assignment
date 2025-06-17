@@ -23,6 +23,7 @@ export default function EditingSection() {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isProceeding, setIsProceeding] = useState(false);
 
   const {
     steps,
@@ -35,6 +36,7 @@ export default function EditingSection() {
     historyIndex,
     reset,
     addStep,
+    setIsLoading,
   } = useWorkflowStore();
 
   // Debug: Check if image loads
@@ -324,11 +326,48 @@ export default function EditingSection() {
             </button>
 
             <button
-              onClick={() => setCurrentStep("confirmation")}
-              className="w-full px-3 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-xs lg:text-sm shadow-md border-0"
+              onClick={async () => {
+                console.log("Proceeding to confirmation...");
+                console.log("Current steps:", steps);
+                if (steps.length === 0) {
+                  alert(
+                    "Please add at least one workflow step before proceeding."
+                  );
+                  return;
+                }
+
+                // Set proceeding state
+                setIsProceeding(true);
+
+                // Brief loading for smooth transition
+                setIsLoading(true);
+
+                // Wait for a smooth transition
+                await new Promise((resolve) => setTimeout(resolve, 800));
+
+                // Navigate to confirmation
+                setCurrentStep("confirmation");
+                setIsLoading(false);
+                setIsProceeding(false);
+              }}
+              disabled={steps.length === 0 || isProceeding}
+              className={`w-full px-3 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-xs lg:text-sm shadow-md border-0 ${
+                steps.length === 0 || isProceeding
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white"
+              }`}
             >
-              <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4" />
-              <span>Proceed to Confirmation</span>
+              {isProceeding ? (
+                <>
+                  <div className="w-3 h-3 lg:w-4 lg:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Preparing Review...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <span>Proceed to Confirmation</span>
+                </>
+              )}
             </button>
           </div>
         </div>
