@@ -109,6 +109,8 @@ export default function InputSection() {
       <div className="w-full max-w-6xl mx-auto text-center relative z-10 px-4">
         {/* Main Heading with Animation */}
         <div className="mb-8 sm:mb-12 md:mb-16">
+          <br />
+          <br />
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-center max-w-full sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-3xl bg-gradient-to-r from-gray-300 via-black to-rose-600 bg-clip-text text-transparent mx-auto px-2">
             <div className="block sm:inline">Create intelligent</div>{" "}
             <span className="relative inline-block mt-2 sm:mt-0 min-h-[1.2em] block sm:inline">
@@ -131,7 +133,7 @@ export default function InputSection() {
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-full sm:max-w-2xl mx-auto mb-6 sm:mb-8">
+        <div className="max-w-full sm:max-w-2xl mx-auto mb-8 sm:mb-10 mt-12 sm:mt-16 md:mt-20">
           <form onSubmit={handleSubmit} className="relative">
             <div className="relative bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 shadow-xl overflow-hidden">
               <div className="flex items-center p-3 sm:p-4 md:p-6 gap-2 sm:gap-3">
@@ -162,7 +164,7 @@ export default function InputSection() {
         </div>
 
         {/* Quick Actions */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-2">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 px-2">
           {[
             "Clean up my CRM",
             "Organize emails",
@@ -181,21 +183,53 @@ export default function InputSection() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto px-4">
+        <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto px-4 mb-8 sm:mb-10">
           Describe your task in plain English and get back an AI-generated,
           editable workflow
         </p>
 
         {/* Current Request Display */}
         {currentPrompt && (
-          <div className="mt-6 sm:mt-8 max-w-full sm:max-w-2xl mx-auto px-4">
-            <div className="bg-blue-50/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-blue-200/50">
-              <p className="text-xs sm:text-sm text-blue-600 font-medium mb-1">
-                Processing request:
-              </p>
-              <p className="text-sm sm:text-base text-blue-800 break-words">
-                &quot;{currentPrompt}&quot;
-              </p>
+          <div className="mt-8 sm:mt-12 max-w-full sm:max-w-2xl mx-auto px-4">
+            <div className="relative bg-gradient-to-r from-white/40 via-rose-50/30 to-white/40 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-rose-200/20 shadow-lg overflow-hidden">
+              {/* Animated background gradient */}
+              <div className="absolute inset-0 bg-gradient-to-r from-rose-100/10 via-pink-100/10 to-rose-100/10 animate-pulse"></div>
+
+              {/* Loading dots animation */}
+              <div className="relative z-10">
+                <div className="flex items-center justify-center mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className="w-2 h-2 bg-rose-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-rose-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "150ms" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-rose-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    ></div>
+                  </div>
+                  <span className="ml-3 text-sm sm:text-base font-semibold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+                    AI Teammate is working...
+                  </span>
+                </div>
+
+                <div className="bg-white/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-rose-200/20">
+                  <p className="text-sm sm:text-base text-gray-700 break-words text-center font-medium">
+                    &quot;<span className="text-rose-700">{currentPrompt}</span>
+                    &quot;
+                  </p>
+                </div>
+
+                <div className="mt-3 text-center">
+                  <p className="text-xs sm:text-sm text-gray-500">
+                    Generating your personalized workflow...
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}
