@@ -124,143 +124,188 @@ export default function EditingSection() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      {/* Beautiful White Sidebar - Soft Red, Rose theme */}
+      <div className="w-full lg:w-64 bg-white/95 backdrop-blur-md border-r border-gray-100 shadow-lg flex flex-col lg:min-h-screen">
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-gray-100">
+          <button
+            onClick={() => setCurrentStep("input")}
+            className="flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors mb-3 w-full text-left group"
+          >
+            <ArrowLeft className="h-4 w-4 text-gray-600 group-hover:text-gray-800" />
+            <span className="text-gray-600 group-hover:text-gray-800 font-medium text-sm">
+              Back to Input
+            </span>
+          </button>
 
-      {/* Content Container */}
-      <div className="relative z-10 max-w-6xl mx-auto p-6">
-        {/* Clean Header Section */}
-        <div className="mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-8">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <button
-                onClick={() => setCurrentStep("input")}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                <ArrowLeft className="h-5 w-5 text-gray-600" />
-                <span className="text-gray-700 font-medium">Back to Input</span>
-              </button>
+          <h1 className="text-lg font-bold text-gray-900 mb-1">
+            Review Workflow
+          </h1>
+          <p className="text-xs text-gray-600 hidden lg:block">
+            Edit, reorder, or ask AI to revise any step.
+          </p>
+        </div>
 
-              {/* Control Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={undo}
-                  disabled={!canUndo}
-                  className="p-2 bg-white hover:bg-gray-50 disabled:bg-gray-50 disabled:text-gray-400 text-gray-600 rounded-lg border border-gray-200 transition-colors disabled:cursor-not-allowed"
-                  title="Undo"
-                >
-                  <Undo2 className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={redo}
-                  disabled={!canRedo}
-                  className="p-2 bg-white hover:bg-gray-50 disabled:bg-gray-50 disabled:text-gray-400 text-gray-600 rounded-lg border border-gray-200 transition-colors disabled:cursor-not-allowed"
-                  title="Redo"
-                >
-                  <Redo2 className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={reset}
-                  className="p-2 bg-white hover:bg-gray-50 text-gray-600 hover:text-red-600 rounded-lg border border-gray-200 transition-colors"
-                  title="Reset Workflow"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                </button>
+        {/* Original Request Card */}
+        <div className="p-4 border-b border-gray-100">
+          <div className="bg-gradient-to-br from-rose-50 to-red-50 rounded-lg p-3 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-1.5 bg-gradient-to-r from-rose-500 to-red-500 rounded-md shadow-sm">
+                <Stars className="h-3 w-3 text-white" />
               </div>
-            </div>
-
-            {/* Clean Title */}
-            <div className="text-center mb-6">
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-                Review Your Workflow
-              </h1>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Edit, reorder, or ask AI to revise any step. When you&apos;re
-                happy with the workflow, proceed to confirmation.
+              <p className="text-rose-800 font-medium text-xs">
+                Original Request
               </p>
             </div>
-
-            {/* Original Request Card */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-blue-600 rounded-lg">
-                  <Stars className="h-5 w-5 text-white" />
-                </div>
-                <p className="text-blue-900 font-semibold text-lg">
-                  Original Request:
-                </p>
-              </div>
-              <p className="text-blue-800 text-lg font-medium italic">
-                &quot;{currentPrompt}&quot;
-              </p>
-            </div>
+            <p className="text-rose-700 text-xs font-medium italic line-clamp-2">
+              &quot;{currentPrompt}&quot;
+            </p>
           </div>
         </div>
 
         {/* Pro Tips Section */}
-        <div className="mb-8">
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-yellow-500 rounded-lg flex-shrink-0">
-                <Lightbulb className="h-5 w-5 text-white" />
+        <div className="p-4 flex-1 overflow-y-auto">
+          <div className="mb-6">
+            <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg mb-3 shadow-sm">
+              <div className="p-1.5 bg-rose-500 rounded-md shadow-sm">
+                <Lightbulb className="h-3 w-3 text-white" />
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-xl text-gray-900 mb-3">
-                  Pro Tips
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-gray-700 font-medium">
-                      Drag steps by the grip handle to reorder
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-gray-700 font-medium">
-                      Click refresh for AI alternative approaches
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-gray-700 font-medium">
-                      Lower confidence = areas where AI is uncertain
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-gray-700 font-medium">
-                      Edit steps directly for customization
-                    </span>
-                  </div>
-                </div>
+              <h3 className="font-medium text-gray-900 text-sm">Pro Tips</h3>
+            </div>
+
+            <div className="space-y-2 ml-3 hidden lg:block">
+              <div className="flex items-center gap-2 px-2 py-1 hover:bg-rose-50/50 rounded transition-colors">
+                <div className="w-1 h-1 bg-rose-400 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-600 text-xs">
+                  Drag steps to reorder
+                </span>
+              </div>
+              <div className="flex items-center gap-2 px-2 py-1 hover:bg-rose-50/50 rounded transition-colors">
+                <div className="w-1 h-1 bg-rose-400 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-600 text-xs">
+                  Click refresh for AI alternatives
+                </span>
+              </div>
+              <div className="flex items-center gap-2 px-2 py-1 hover:bg-rose-50/50 rounded transition-colors">
+                <div className="w-1 h-1 bg-rose-400 rounded-full flex-shrink-0"></div>
+                <span className="text-gray-600 text-xs">
+                  Lower confidence = uncertain areas
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions Section */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg mb-3 shadow-sm">
+              <div className="p-1.5 bg-red-500 rounded-md shadow-sm">
+                <Zap className="h-3 w-3 text-white" />
+              </div>
+              <h4 className="font-medium text-gray-900 text-sm">Actions</h4>
+            </div>
+            <div className="grid grid-cols-3 gap-1 ml-3">
+              <button
+                onClick={undo}
+                disabled={!canUndo}
+                className="p-2 bg-white hover:bg-rose-50 disabled:bg-gray-50 disabled:text-gray-400 text-gray-600 hover:text-rose-600 rounded-md transition-colors disabled:cursor-not-allowed text-xs flex flex-col items-center gap-1 shadow-sm border-0"
+                title="Undo"
+              >
+                <Undo2 className="h-3 w-3" />
+                <span className="hidden lg:block">Undo</span>
+              </button>
+              <button
+                onClick={redo}
+                disabled={!canRedo}
+                className="p-2 bg-white hover:bg-rose-50 disabled:bg-gray-50 disabled:text-gray-400 text-gray-600 hover:text-rose-600 rounded-md transition-colors disabled:cursor-not-allowed text-xs flex flex-col items-center gap-1 shadow-sm border-0"
+                title="Redo"
+              >
+                <Redo2 className="h-3 w-3" />
+                <span className="hidden lg:block">Redo</span>
+              </button>
+              <button
+                onClick={reset}
+                className="p-2 bg-white hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-md transition-colors text-xs flex flex-col items-center gap-1 shadow-sm border-0"
+                title="Reset Workflow"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span className="hidden lg:block">Reset</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Workflow Stats */}
+          <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-3 mb-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-1.5 bg-gradient-to-r from-gray-500 to-gray-600 rounded-md shadow-sm">
+                <Sparkles className="h-3 w-3 text-white" />
+              </div>
+              <h4 className="font-medium text-gray-900 text-sm">Stats</h4>
+            </div>
+            <div className="text-xs text-gray-600 ml-6">
+              <div className="flex justify-between items-center">
+                <span>Steps:</span>
+                <span className="font-medium text-gray-800 bg-white px-2 py-0.5 rounded text-xs shadow-sm">
+                  {steps.length}
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Workflow Steps - Dynamic Canvas Layout Like Reference Image */}
-        <div className="mb-8">
-          <div className="workflow-canvas bg-white rounded-lg border border-gray-200 shadow-sm p-8 min-h-[600px] relative">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-              Workflow Canvas
-            </h2>
+        {/* Bottom Action Buttons */}
+        <div className="p-4 border-t border-gray-100">
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => setCurrentStep("input")}
+              className="w-full px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900 rounded-lg font-medium transition-all text-xs lg:text-sm shadow-sm border-0"
+            >
+              ← Back to Edit
+            </button>
+
+            <button
+              onClick={() => setCurrentStep("confirmation")}
+              className="w-full px-3 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-xs lg:text-sm shadow-md border-0"
+            >
+              <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4" />
+              <span className="hidden sm:inline">Proceed to</span>
+              <span>Confirmation</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area - Responsive */}
+      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
+        {/* Workflow Steps - Dynamic Canvas Layout */}
+        <div className="h-full min-h-[60vh] lg:min-h-full">
+          <div className="workflow-canvas bg-white rounded-xl lg:rounded-2xl border border-gray-100 shadow-lg lg:shadow-xl p-4 lg:p-8 h-full relative overflow-hidden">
+            {/* Canvas Header */}
+            <div className="text-center mb-6 lg:mb-8">
+              <h2 className="text-xl lg:text-3xl font-bold text-gray-900 mb-1 lg:mb-2">
+                Workflow Canvas
+              </h2>
+              <p className="text-gray-600 text-sm lg:text-base hidden sm:block">
+                Drag and arrange your workflow steps below
+              </p>
+            </div>
 
             {/* Dynamic positioned workflow steps */}
-            <div className="relative w-full h-full">
+            <div
+              className="relative w-full"
+              style={{ height: "calc(100% - 120px)" }}
+            >
               {steps.map((step, index) => {
-                // Dynamic positioning for each step
                 const position =
                   cardPositions[index] || getDefaultPosition(index);
 
                 return (
                   <div
                     key={step.id}
-                    className={`workflow-card absolute transition-all duration-200 ${
+                    className={`workflow-card absolute transition-all duration-300 ${
                       dragging === index
-                        ? "transform scale-105 z-20 opacity-75"
-                        : "z-10"
+                        ? "transform scale-105 z-20 opacity-75 rotate-1"
+                        : "z-10 hover:scale-102"
                     }`}
                     style={{ left: `${position.x}px`, top: `${position.y}px` }}
                   >
@@ -274,75 +319,49 @@ export default function EditingSection() {
                 );
               })}
 
-              {/* Grid background for better visual guidance */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
+              {/* Beautiful soft grid background */}
+              <div className="absolute inset-0 opacity-40 pointer-events-none">
                 <div
                   className="w-full h-full"
                   style={{
-                    backgroundImage:
-                      "radial-gradient(circle, #9CA3AF 1px, transparent 1px)",
-                    backgroundSize: "20px 20px",
+                    backgroundImage: `
+                    radial-gradient(circle at 25% 25%, #E11D48 1.2px, transparent 1.2px),
+                    radial-gradient(circle at 75% 75%, #BE185D 1.2px, transparent 1.2px)
+                  `,
+                    backgroundSize: "40px 40px, 60px 60px",
+                    backgroundPosition: "0 0, 20px 20px",
                   }}
                 ></div>
               </div>
 
               {/* Drop zone indicator */}
               {dragging !== null && (
-                <div className="absolute inset-0 border-2 border-dashed border-blue-400 bg-blue-50 bg-opacity-30 rounded-lg pointer-events-none">
+                <div className="absolute inset-0 border-2 border-dashed border-rose-300 bg-rose-50/30 rounded-xl pointer-events-none backdrop-blur-sm">
                   <div className="flex items-center justify-center h-full">
-                    <p className="text-blue-600 font-medium">
-                      Drop anywhere to position your workflow step
-                    </p>
+                    <div className="bg-white/95 backdrop-blur rounded-lg px-4 lg:px-6 py-2 lg:py-3 shadow-lg border-0">
+                      <p className="text-rose-600 font-semibold text-sm lg:text-base">
+                        Drop anywhere to position
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-          </div>
-        </div>
 
-        {/* Add Step Button */}
-        <div className="mb-8 max-w-sm mx-auto">
-          <button
-            onClick={addNewStep}
-            className="w-full p-4 border-2 border-dashed border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50 rounded-lg transition-all duration-200 group"
-          >
-            <div className="flex items-center justify-center gap-3">
-              <div className="p-2 bg-gray-600 rounded-lg group-hover:bg-gray-700 transition-colors">
-                <Plus className="h-5 w-5 text-white" />
-              </div>
-              <span className="font-medium text-gray-700 group-hover:text-gray-900">
-                Add Custom Step
-              </span>
-            </div>
-          </button>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="text-center sm:text-left">
-              <div className="text-xl font-bold text-gray-900 mb-2">
-                {steps.length} steps in your workflow
-              </div>
-              <div className="text-gray-600 font-medium">
-                Ready to proceed when you are!
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            {/* Add Step Button - Fixed at bottom of canvas */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-4">
               <button
-                onClick={() => setCurrentStep("input")}
-                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors border border-gray-300"
+                onClick={addNewStep}
+                className="w-full p-3 lg:p-4 border border-gray-200/50 hover:border-rose-300/50 bg-white/95 hover:bg-rose-50/50 backdrop-blur-sm rounded-lg lg:rounded-xl transition-all duration-300 group shadow-md hover:shadow-lg"
               >
-                Back to Edit Request
-              </button>
-
-              <button
-                onClick={() => setCurrentStep("confirmation")}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
-              >
-                <CheckCircle className="h-5 w-5" />
-                <span>Proceed to Confirmation</span>
+                <div className="flex items-center justify-center gap-2 lg:gap-3">
+                  <div className="p-2 lg:p-3 bg-gradient-to-r from-rose-500 to-red-500 rounded-lg group-hover:scale-110 transition-transform shadow-sm">
+                    <Plus className="h-4 w-4 lg:h-5 lg:w-5 text-white" />
+                  </div>
+                  <span className="font-semibold text-gray-700 group-hover:text-rose-600 text-sm lg:text-base">
+                    Add Custom Step
+                  </span>
+                </div>
               </button>
             </div>
           </div>
