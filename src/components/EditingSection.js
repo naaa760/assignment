@@ -127,18 +127,15 @@ export default function EditingSection() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex relative">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: "url('/sd.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      ></div>
-
+    <div
+      className="min-h-screen flex relative"
+      style={{
+        background: `linear-gradient(rgba(249, 250, 251, 0.7), rgba(249, 250, 251, 0.7)), url('/sd.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
@@ -319,12 +316,12 @@ export default function EditingSection() {
       </div>
 
       {/* Main Content Area - Always visible */}
-      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white lg:ml-0">
+      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50/80 to-white/80 lg:ml-0 relative z-10">
         {/* Mobile Canvas padding for menu button */}
         <div className="pt-12 lg:pt-0 h-full">
           {/* Workflow Steps - Dynamic Canvas Layout */}
           <div className="h-full min-h-[calc(100vh-120px)] lg:min-h-full">
-            <div className="workflow-canvas bg-white rounded-xl lg:rounded-2xl border border-gray-100 shadow-lg lg:shadow-xl p-4 lg:p-8 h-full relative overflow-hidden">
+            <div className="workflow-canvas bg-white/90 backdrop-blur-sm rounded-xl lg:rounded-2xl border border-gray-100 shadow-lg lg:shadow-xl p-4 lg:p-8 h-full relative overflow-hidden">
               {/* Canvas Header */}
               <div className="text-center mb-6 lg:mb-8">
                 <h2 className="text-lg lg:text-3xl font-bold text-gray-900 mb-1 lg:mb-2">
