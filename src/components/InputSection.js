@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { Send } from "lucide-react";
 import useWorkflowStore from "../store/workflowStore";
 
 export default function InputSection() {
@@ -79,24 +79,38 @@ export default function InputSection() {
   return (
     <div
       ref={vantaRef}
-      className="min-h-screen flex flex-col items-center justify-center p-6 relative"
+      className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden"
       style={{ backgroundColor: "#f8fafc" }}
     >
+      {/* Moving Background Image Layer */}
+      <div
+        className="absolute inset-0 w-full h-full opacity-30"
+        style={{
+          backgroundImage: "url(/k.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          animation: "float 6s ease-in-out infinite",
+        }}
+      />
+
+      {/* Additional Moving Layer for Depth */}
+      <div
+        className="absolute inset-0 w-full h-full opacity-20"
+        style={{
+          backgroundImage: "url(/k.png)",
+          backgroundSize: "120% 120%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          animation: "floatReverse 8s ease-in-out infinite",
+        }}
+      />
+
       {/* Content */}
       <div className="w-full max-w-3xl mx-auto text-center relative z-10">
-        {/* Logo */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full shadow-lg">
-            <Sparkles className="h-8 w-8 text-white" />
-          </div>
-          <span className="ml-3 text-2xl font-bold text-gray-900">
-            AI Teammate
-          </span>
-        </div>
-
         {/* Main Heading with Animation */}
         <div className="mb-16">
-          <h1 className="text-6xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-6xl font-bold leading-tight text-center max-w-[800px] lg:max-w-3xl md:max-w-2xl sm:max-w-xl bg-gradient-to-r from-gray-300 via-black to-rose-600 bg-clip-text text-transparent mx-auto">
             Create intelligent{" "}
             <span className="relative inline-block">
               <span
@@ -104,7 +118,7 @@ export default function InputSection() {
                 className="block w-full flex-grow overflow-hidden absolute left-0 animate-fadeInUp"
                 style={{
                   background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    "linear-gradient(135deg, #E5E7EB 0%, #000000 25%, #DC2626 50%, #F3F4F6 75%, #BE185D 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -120,34 +134,31 @@ export default function InputSection() {
         {/* Search Bar */}
         <div className="max-w-2xl mx-auto mb-8">
           <form onSubmit={handleSubmit} className="relative">
-            <div className="relative bg-white/80 backdrop-blur-md rounded-2xl border border-gray-200/50 shadow-xl overflow-hidden">
+            <div className="relative bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 shadow-xl overflow-hidden">
               <div className="flex items-center p-6">
-                <div className="flex-shrink-0 mr-4">
-                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
-                </div>
-
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Hey AI Teammate..."
-                  className="flex-1 text-lg bg-transparent border-none outline-none placeholder-gray-500 text-gray-900"
+                  className="flex-1 text-lg bg-transparent border-none outline-none placeholder-gray-500 text-gray-900 pr-4"
                   disabled={isLoading}
                 />
 
-                <button
-                  type="submit"
-                  disabled={!input.trim() || isLoading}
-                  className="flex-shrink-0 ml-4 p-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-200"
-                >
-                  {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <Send className="h-5 w-5" />
-                  )}
-                </button>
+                {/* Beautiful Send Button */}
+                {input.trim() && (
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-shrink-0 ml-3 p-3 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
+                  >
+                    {isLoading ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5" />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </form>
@@ -201,6 +212,38 @@ export default function InputSection() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px) scale(1);
+          }
+          25% {
+            transform: translateY(-10px) translateX(5px) scale(1.02);
+          }
+          50% {
+            transform: translateY(-5px) translateX(-3px) scale(1.01);
+          }
+          75% {
+            transform: translateY(-15px) translateX(2px) scale(1.03);
+          }
+        }
+
+        @keyframes floatReverse {
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px) scale(1.1);
+          }
+          25% {
+            transform: translateY(8px) translateX(-4px) scale(1.08);
+          }
+          50% {
+            transform: translateY(12px) translateX(6px) scale(1.12);
+          }
+          75% {
+            transform: translateY(4px) translateX(-2px) scale(1.09);
           }
         }
 
