@@ -222,7 +222,7 @@ function generateMockSteps(prompt) {
     tool: tools[Math.floor(Math.random() * tools.length)],
     reasoning: template.reasoning,
     agent: agents[Math.floor(Math.random() * agents.length)],
-    confidence: 0.7 + Math.random() * 0.3, // 70-100% confidence
+    confidence: 0.7 + Math.random() * 0.3,
     order: index + 1,
   }));
 }

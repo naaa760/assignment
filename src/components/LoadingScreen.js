@@ -1,8 +1,41 @@
+import { useState, useEffect, useRef } from "react";
 import { Bot, Brain, Sparkles } from "lucide-react";
 import useWorkflowStore from "../store/workflowStore";
 
 export default function LoadingScreen() {
   const { currentPrompt } = useWorkflowStore();
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const vantaRef = useRef(null);
+
+  useEffect(() => {
+    if (!vantaEffect) {
+      import("vanta/dist/vanta.fog.min.js").then((VANTA) => {
+        import("three").then((THREE) => {
+          setVantaEffect(
+            VANTA.default.FOG({
+              el: vantaRef.current,
+              THREE: THREE,
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.0,
+              minWidth: 200.0,
+              highlightColor: 0xd7b8b8,
+              midtoneColor: 0xffffff,
+              lowlightColor: 0xffe4e4,
+              baseColor: 0xffffff,
+              blurFactor: 0.9,
+              speed: 1.1,
+              zoom: 0.9,
+            })
+          );
+        });
+      });
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   const loadingSteps = [
     { icon: Brain, text: "Analyzing your request", delay: 0 },
@@ -11,30 +44,33 @@ export default function LoadingScreen() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-6">
-      <div className="max-w-md mx-auto text-center">
+    <div
+      ref={vantaRef}
+      className="min-h-screen flex items-center justify-center p-6 relative"
+    >
+      <div className="max-w-md mx-auto text-center relative z-10">
         {/* Animated Logo */}
         <div className="mb-8">
           <div className="relative">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full animate-pulse">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full animate-pulse shadow-lg">
               <Bot className="h-12 w-12 text-white" />
             </div>
-            <div className="absolute -top-2 -right-2 bg-yellow-400 p-1 rounded-full animate-bounce">
+            <div className="absolute -top-2 -right-2 bg-yellow-400 p-1 rounded-full animate-bounce shadow-lg">
               <Sparkles className="h-4 w-4 text-yellow-800" />
             </div>
           </div>
         </div>
 
         {/* Main Loading Message */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 drop-shadow-sm">
           AI is thinking...
         </h2>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-700 mb-8 drop-shadow-sm">
           Creating your personalized workflow for:
         </p>
 
         {/* User Request */}
-        <div className="bg-white rounded-xl p-4 mb-8 border-2 border-gray-200 shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 mb-8 border-2 border-gray-200 shadow-lg">
           <p className="text-gray-800 italic">&quot;{currentPrompt}&quot;</p>
         </div>
 
@@ -51,9 +87,9 @@ export default function LoadingScreen() {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-gray-200/80 backdrop-blur-sm rounded-full h-2 shadow-sm">
           <div
-            className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full animate-pulse"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full animate-pulse shadow-sm"
             style={{
               width: "60%",
               animation: "loadingProgress 3s ease-in-out infinite",
@@ -61,7 +97,7 @@ export default function LoadingScreen() {
           ></div>
         </div>
 
-        <p className="text-sm text-gray-500 mt-4">
+        <p className="text-sm text-gray-600 mt-4 drop-shadow-sm">
           This usually takes 2-3 seconds...
         </p>
       </div>
@@ -86,7 +122,7 @@ export default function LoadingScreen() {
 function LoadingStep({ icon: Icon, text, delay }) {
   return (
     <div
-      className="flex items-center gap-3 text-left opacity-0 animate-fadeIn"
+      className="flex items-center gap-3 text-left opacity-0 animate-fadeIn bg-white/70 backdrop-blur-sm rounded-lg p-3 shadow-sm"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="bg-blue-100 p-2 rounded-full flex-shrink-0">
