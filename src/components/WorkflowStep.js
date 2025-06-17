@@ -18,6 +18,7 @@ export default function WorkflowStep({
   index,
   isDragging = false,
   onMouseDown,
+  onTouchStart,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(step.title);
@@ -46,6 +47,12 @@ export default function WorkflowStep({
   const handleMouseDown = (e) => {
     if (onMouseDown) {
       onMouseDown(e, index);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    if (onTouchStart) {
+      onTouchStart(e, index);
     }
   };
 
@@ -89,6 +96,7 @@ export default function WorkflowStep({
         <div
           className="absolute left-1 top-1/2 transform -translate-y-1/2 cursor-grab active:cursor-grabbing p-1 z-10 select-none"
           onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
           title="Drag to reorder"
         >
           <div className="flex flex-col gap-1">

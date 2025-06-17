@@ -80,6 +80,23 @@ export default function EditingSection() {
     });
   };
 
+  // Touch start - for mobile devices
+  const handleTouchStart = (e, index) => {
+    e.preventDefault();
+    const canvas = document.querySelector(".workflow-canvas");
+    const canvasRect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    const currentPos = cardPositions[index] || getDefaultPosition(index);
+
+    setDragging(index);
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+    setDragOffset({
+      x: touch.clientX - canvasRect.left - currentPos.x,
+      y: touch.clientY - canvasRect.top - currentPos.y,
+    });
+  };
+
   // Mouse move - update card position
   const handleMouseMove = (e) => {
     if (dragging !== null) {
@@ -100,8 +117,37 @@ export default function EditingSection() {
     }
   };
 
+  // Touch move - for mobile devices
+  const handleTouchMove = (e) => {
+    if (dragging !== null) {
+      e.preventDefault(); // Prevent scrolling while dragging
+      const canvas = document.querySelector(".workflow-canvas");
+      const canvasRect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+
+      const newX = touch.clientX - canvasRect.left - dragOffset.x;
+      const newY = touch.clientY - canvasRect.top - dragOffset.y;
+
+      // Keep within canvas bounds
+      const boundedX = Math.max(0, Math.min(canvasRect.width - 200, newX));
+      const boundedY = Math.max(0, Math.min(canvasRect.height - 100, newY));
+
+      setCardPositions((prev) => ({
+        ...prev,
+        [dragging]: { x: boundedX, y: boundedY },
+      }));
+    }
+  };
+
   // Mouse up - stop dragging
   const handleMouseUp = () => {
+    setDragging(null);
+    setDragStart({ x: 0, y: 0 });
+    setDragOffset({ x: 0, y: 0 });
+  };
+
+  // Touch end - for mobile devices
+  const handleTouchEnd = () => {
     setDragging(null);
     setDragStart({ x: 0, y: 0 });
     setDragOffset({ x: 0, y: 0 });
@@ -110,12 +156,24 @@ export default function EditingSection() {
   // Add event listeners
   React.useEffect(() => {
     if (dragging !== null) {
+      // Mouse events
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
 
+      // Touch events for mobile
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+      document.addEventListener("touchend", handleTouchEnd);
+
       return () => {
+        // Cleanup mouse events
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
+
+        // Cleanup touch events
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
       };
     }
   }, [dragging, dragOffset]);
@@ -417,6 +475,7 @@ export default function EditingSection() {
                         index={index}
                         isDragging={dragging === index}
                         onMouseDown={handleMouseDown}
+                        onTouchStart={handleTouchStart}
                       />
                     </div>
                   );
