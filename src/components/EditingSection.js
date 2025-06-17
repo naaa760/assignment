@@ -11,6 +11,8 @@ import {
   Sparkles,
   Zap,
   Stars,
+  Menu,
+  X,
 } from "lucide-react";
 import useWorkflowStore from "../store/workflowStore";
 import WorkflowStep from "./WorkflowStep";
@@ -20,6 +22,7 @@ export default function EditingSection() {
   const [dragging, setDragging] = useState(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const {
     steps,
@@ -124,9 +127,39 @@ export default function EditingSection() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
-      {/* Beautiful White Sidebar - Soft Red, Rose theme */}
-      <div className="w-full lg:w-64 bg-white/95 backdrop-blur-md border-r border-gray-100 shadow-lg flex flex-col lg:min-h-screen">
+    <div className="min-h-screen bg-gray-50 flex relative">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-200"
+      >
+        <Menu className="h-5 w-5 text-gray-600" />
+      </button>
+
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Beautiful White Sidebar - Mobile responsive */}
+      <div
+        className={`
+        fixed lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out z-50
+        w-80 lg:w-64 bg-white/95 backdrop-blur-md border-r border-gray-100 shadow-lg flex flex-col h-full lg:min-h-screen
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
+        {/* Mobile Close Button */}
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="lg:hidden absolute top-4 right-4 p-1 rounded-md hover:bg-gray-100"
+        >
+          <X className="h-4 w-4 text-gray-600" />
+        </button>
+
         {/* Sidebar Header */}
         <div className="p-4 border-b border-gray-100">
           <button
@@ -142,7 +175,7 @@ export default function EditingSection() {
           <h1 className="text-lg font-bold text-gray-900 mb-1">
             Review Workflow
           </h1>
-          <p className="text-xs text-gray-600 hidden lg:block">
+          <p className="text-xs text-gray-600">
             Edit, reorder, or ask AI to revise any step.
           </p>
         </div>
@@ -174,7 +207,7 @@ export default function EditingSection() {
               <h3 className="font-medium text-gray-900 text-sm">Pro Tips</h3>
             </div>
 
-            <div className="space-y-2 ml-3 hidden lg:block">
+            <div className="space-y-2 ml-3">
               <div className="flex items-center gap-2 px-2 py-1 hover:bg-rose-50/50 rounded transition-colors">
                 <div className="w-1 h-1 bg-rose-400 rounded-full flex-shrink-0"></div>
                 <span className="text-gray-600 text-xs">
@@ -212,7 +245,7 @@ export default function EditingSection() {
                 title="Undo"
               >
                 <Undo2 className="h-3 w-3" />
-                <span className="hidden lg:block">Undo</span>
+                <span className="text-xs">Undo</span>
               </button>
               <button
                 onClick={redo}
@@ -221,7 +254,7 @@ export default function EditingSection() {
                 title="Redo"
               >
                 <Redo2 className="h-3 w-3" />
-                <span className="hidden lg:block">Redo</span>
+                <span className="text-xs">Redo</span>
               </button>
               <button
                 onClick={reset}
@@ -229,7 +262,7 @@ export default function EditingSection() {
                 title="Reset Workflow"
               >
                 <RotateCcw className="h-3 w-3" />
-                <span className="hidden lg:block">Reset</span>
+                <span className="text-xs">Reset</span>
               </button>
             </div>
           </div>
@@ -268,101 +301,106 @@ export default function EditingSection() {
               className="w-full px-3 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-xs lg:text-sm shadow-md border-0"
             >
               <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4" />
-              <span className="hidden sm:inline">Proceed to</span>
-              <span>Confirmation</span>
+              <span>Proceed to Confirmation</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content Area - Responsive */}
-      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white">
-        {/* Workflow Steps - Dynamic Canvas Layout */}
-        <div className="h-full min-h-[60vh] lg:min-h-full">
-          <div className="workflow-canvas bg-white rounded-xl lg:rounded-2xl border border-gray-100 shadow-lg lg:shadow-xl p-4 lg:p-8 h-full relative overflow-hidden">
-            {/* Canvas Header */}
-            <div className="text-center mb-6 lg:mb-8">
-              <h2 className="text-xl lg:text-3xl font-bold text-gray-900 mb-1 lg:mb-2">
-                Workflow Canvas
-              </h2>
-              <p className="text-gray-600 text-sm lg:text-base hidden sm:block">
-                Drag and arrange your workflow steps below
-              </p>
-            </div>
-
-            {/* Dynamic positioned workflow steps */}
-            <div
-              className="relative w-full"
-              style={{ height: "calc(100% - 120px)" }}
-            >
-              {steps.map((step, index) => {
-                const position =
-                  cardPositions[index] || getDefaultPosition(index);
-
-                return (
-                  <div
-                    key={step.id}
-                    className={`workflow-card absolute transition-all duration-300 ${
-                      dragging === index
-                        ? "transform scale-105 z-20 opacity-75 rotate-1"
-                        : "z-10 hover:scale-102"
-                    }`}
-                    style={{ left: `${position.x}px`, top: `${position.y}px` }}
-                  >
-                    <WorkflowStep
-                      step={step}
-                      index={index}
-                      isDragging={dragging === index}
-                      onMouseDown={handleMouseDown}
-                    />
-                  </div>
-                );
-              })}
-
-              {/* Beautiful soft grid background */}
-              <div className="absolute inset-0 opacity-40 pointer-events-none">
-                <div
-                  className="w-full h-full"
-                  style={{
-                    backgroundImage: `
-                    radial-gradient(circle at 25% 25%, #E11D48 1.2px, transparent 1.2px),
-                    radial-gradient(circle at 75% 75%, #BE185D 1.2px, transparent 1.2px)
-                  `,
-                    backgroundSize: "40px 40px, 60px 60px",
-                    backgroundPosition: "0 0, 20px 20px",
-                  }}
-                ></div>
+      {/* Main Content Area - Always visible */}
+      <div className="flex-1 p-4 lg:p-8 bg-gradient-to-br from-gray-50 to-white lg:ml-0">
+        {/* Mobile Canvas padding for menu button */}
+        <div className="pt-12 lg:pt-0 h-full">
+          {/* Workflow Steps - Dynamic Canvas Layout */}
+          <div className="h-full min-h-[calc(100vh-120px)] lg:min-h-full">
+            <div className="workflow-canvas bg-white rounded-xl lg:rounded-2xl border border-gray-100 shadow-lg lg:shadow-xl p-4 lg:p-8 h-full relative overflow-hidden">
+              {/* Canvas Header */}
+              <div className="text-center mb-6 lg:mb-8">
+                <h2 className="text-lg lg:text-3xl font-bold text-gray-900 mb-1 lg:mb-2">
+                  Workflow Canvas
+                </h2>
+                <p className="text-gray-600 text-xs lg:text-base">
+                  Drag and arrange your workflow steps below
+                </p>
               </div>
 
-              {/* Drop zone indicator */}
-              {dragging !== null && (
-                <div className="absolute inset-0 border-2 border-dashed border-rose-300 bg-rose-50/30 rounded-xl pointer-events-none backdrop-blur-sm">
-                  <div className="flex items-center justify-center h-full">
-                    <div className="bg-white/95 backdrop-blur rounded-lg px-4 lg:px-6 py-2 lg:py-3 shadow-lg border-0">
-                      <p className="text-rose-600 font-semibold text-sm lg:text-base">
-                        Drop anywhere to position
-                      </p>
+              {/* Dynamic positioned workflow steps */}
+              <div
+                className="relative w-full"
+                style={{ height: "calc(100% - 120px)" }}
+              >
+                {steps.map((step, index) => {
+                  const position =
+                    cardPositions[index] || getDefaultPosition(index);
+
+                  return (
+                    <div
+                      key={step.id}
+                      className={`workflow-card absolute transition-all duration-300 ${
+                        dragging === index
+                          ? "transform scale-105 z-20 opacity-75 rotate-1"
+                          : "z-10 hover:scale-102"
+                      }`}
+                      style={{
+                        left: `${position.x}px`,
+                        top: `${position.y}px`,
+                      }}
+                    >
+                      <WorkflowStep
+                        step={step}
+                        index={index}
+                        isDragging={dragging === index}
+                        onMouseDown={handleMouseDown}
+                      />
+                    </div>
+                  );
+                })}
+
+                {/* Beautiful soft grid background */}
+                <div className="absolute inset-0 opacity-40 pointer-events-none">
+                  <div
+                    className="w-full h-full"
+                    style={{
+                      backgroundImage: `
+                      radial-gradient(circle at 25% 25%, #E11D48 1.2px, transparent 1.2px),
+                      radial-gradient(circle at 75% 75%, #BE185D 1.2px, transparent 1.2px)
+                    `,
+                      backgroundSize: "40px 40px, 60px 60px",
+                      backgroundPosition: "0 0, 20px 20px",
+                    }}
+                  ></div>
+                </div>
+
+                {/* Drop zone indicator */}
+                {dragging !== null && (
+                  <div className="absolute inset-0 border-2 border-dashed border-rose-300 bg-rose-50/30 rounded-xl pointer-events-none backdrop-blur-sm">
+                    <div className="flex items-center justify-center h-full">
+                      <div className="bg-white/95 backdrop-blur rounded-lg px-4 lg:px-6 py-2 lg:py-3 shadow-lg border-0">
+                        <p className="text-rose-600 font-semibold text-sm lg:text-base">
+                          Drop anywhere to position
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            {/* Add Step Button - Fixed at bottom of canvas */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-4">
-              <button
-                onClick={addNewStep}
-                className="w-full p-3 lg:p-4 border border-gray-200/50 hover:border-rose-300/50 bg-white/95 hover:bg-rose-50/50 backdrop-blur-sm rounded-lg lg:rounded-xl transition-all duration-300 group shadow-md hover:shadow-lg"
-              >
-                <div className="flex items-center justify-center gap-2 lg:gap-3">
-                  <div className="p-2 lg:p-3 bg-gradient-to-r from-rose-500 to-red-500 rounded-lg group-hover:scale-110 transition-transform shadow-sm">
-                    <Plus className="h-4 w-4 lg:h-5 lg:w-5 text-white" />
+              {/* Add Step Button - Fixed at bottom of canvas */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-4">
+                <button
+                  onClick={addNewStep}
+                  className="w-full p-3 lg:p-4 border border-gray-200/50 hover:border-rose-300/50 bg-white/95 hover:bg-rose-50/50 backdrop-blur-sm rounded-lg lg:rounded-xl transition-all duration-300 group shadow-md hover:shadow-lg"
+                >
+                  <div className="flex items-center justify-center gap-2 lg:gap-3">
+                    <div className="p-2 lg:p-3 bg-gradient-to-r from-rose-500 to-red-500 rounded-lg group-hover:scale-110 transition-transform shadow-sm">
+                      <Plus className="h-4 w-4 lg:h-5 lg:w-5 text-white" />
+                    </div>
+                    <span className="font-semibold text-gray-700 group-hover:text-rose-600 text-sm lg:text-base">
+                      Add Custom Step
+                    </span>
                   </div>
-                  <span className="font-semibold text-gray-700 group-hover:text-rose-600 text-sm lg:text-base">
-                    Add Custom Step
-                  </span>
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         </div>
